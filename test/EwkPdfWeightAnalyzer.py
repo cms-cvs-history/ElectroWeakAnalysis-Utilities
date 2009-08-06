@@ -6,7 +6,7 @@ process = cms.Process("PDFANA")
 # Max events
 process.maxEvents = cms.untracked.PSet(
     #input = cms.untracked.int32(-1)
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(10)
 )
 
 # Printouts
@@ -26,6 +26,7 @@ process.source = cms.Source("PoolSource",
       debugVerbosity = cms.untracked.uint32(0),
       debugFlag = cms.untracked.bool(False),
       fileNames = cms.untracked.vstring("file:/data4/Wmunu-Summer09-MC_31X_V2_preproduction_311-v1/0011/F4C91F77-766D-DE11-981F-00163E1124E7.root")
+      #fileNames = cms.untracked.vstring("file:/dataamscie1b/Wmunu-Summer09-MC_31X_V2_preproduction_311-v1/0011/F4C91F77-766D-DE11-981F-00163E1124E7.root")
 )
 
 # Produce PDF weights
@@ -54,7 +55,7 @@ process.pdfOutput = cms.OutputModule("PoolOutputModule",
     SelectEvents = cms.untracked.PSet(
         SelectEvents = cms.vstring('pdfana')
     ),
-    fileName = cms.untracked.string('root_files/pdfAnalyzer_Events.root')
+    fileName = cms.untracked.string('pdfAnalyzer_Events.root')
 )
 
 # Runnning and end paths
