@@ -29,9 +29,7 @@ process.source = cms.Source("PoolSource",
       #fileNames = cms.untracked.vstring("file:/dataamscie1b/Wmunu-Summer09-MC_31X_V2_preproduction_311-v1/0011/F4C91F77-766D-DE11-981F-00163E1124E7.root")
 )
 
-# Produce event weights according to generated boson Pt
-# Example corresponds to approximate weights to study
-# systematic effects due to ISR uncertainties (Z boson)
+# Produce event weights according to FSR QED O(alpha) correct matrix element calculation
 process.fsrWeight = cms.EDProducer("FSRWeightProducer",
       GenTag = cms.untracked.InputTag("generator"),
 )
