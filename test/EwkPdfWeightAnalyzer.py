@@ -32,12 +32,14 @@ process.source = cms.Source("PoolSource",
 # Produce PDF weights
 process.ewkPdfWeights = cms.EDProducer("EwkPdfWeightProducer",
       PdfInfoTag = cms.untracked.InputTag("generator"),
-      PdfSetName = cms.untracked.string("cteq65.LHgrid")
+      PdfSetNames = cms.untracked.vstring(
+            "cteq65.LHgrid", "MRST2007lomod.LHgrid", "MRST2006nnlo.LHgrid"
+      )
 )
 
 # Check that it is fine
 process.pdfAnalyzer = cms.EDFilter("EwkPdfWeightAnalyzer",
-      PdfWeightTag = cms.untracked.InputTag("ewkPdfWeights")
+      PdfWeightTag = cms.untracked.InputTag("ewkPdfWeights:MRST2006nnlo")
 )
 
 # Save PDF weights in the output file 

@@ -24,7 +24,7 @@ private:
 
 /////////////////////////////////////////////////////////////////////////////////////
 EwkPdfWeightAnalyzer::EwkPdfWeightAnalyzer(const edm::ParameterSet& pset) :
-  pdfWeightTag_(pset.getUntrackedParameter<edm::InputTag> ("PdfWeightTag", edm::InputTag("ewkPdfWeights"))) { 
+  pdfWeightTag_(pset.getUntrackedParameter<edm::InputTag> ("PdfWeightTag")) { 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
