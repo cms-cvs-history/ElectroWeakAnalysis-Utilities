@@ -2,10 +2,10 @@
 #include "FWCore/Framework/interface/EDFilter.h"
 #include "FWCore/ParameterSet/interface/InputTag.h"
 
-class FSRWeightAnalyzer: public edm::EDFilter {
+class WFSRWeightAnalyzer: public edm::EDFilter {
 public:
-      FSRWeightAnalyzer(const edm::ParameterSet& pset);
-      virtual ~FSRWeightAnalyzer();
+      WFSRWeightAnalyzer(const edm::ParameterSet& pset);
+      virtual ~WFSRWeightAnalyzer();
       virtual bool filter(edm::Event &, const edm::EventSetup&);
       virtual void beginJob(const edm::EventSetup& eventSetup) ;
       virtual void endJob() ;
@@ -23,21 +23,21 @@ private:
 #include "DataFormats/Common/interface/Handle.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
-FSRWeightAnalyzer::FSRWeightAnalyzer(const edm::ParameterSet& pset) :
-  weightTag_(pset.getUntrackedParameter<edm::InputTag> ("WeightTag", edm::InputTag("fsrWeight"))) { 
+WFSRWeightAnalyzer::WFSRWeightAnalyzer(const edm::ParameterSet& pset) :
+  weightTag_(pset.getUntrackedParameter<edm::InputTag> ("WeightTag", edm::InputTag("WFSRWeight"))) { 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-FSRWeightAnalyzer::~FSRWeightAnalyzer(){}
+WFSRWeightAnalyzer::~WFSRWeightAnalyzer(){}
 
 /////////////////////////////////////////////////////////////////////////////////////
-void FSRWeightAnalyzer::beginJob(const edm::EventSetup& eventSetup){}
+void WFSRWeightAnalyzer::beginJob(const edm::EventSetup& eventSetup){}
 
 /////////////////////////////////////////////////////////////////////////////////////
-void FSRWeightAnalyzer::endJob(){}
+void WFSRWeightAnalyzer::endJob(){}
 
 /////////////////////////////////////////////////////////////////////////////////////
-bool FSRWeightAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
+bool WFSRWeightAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
       edm::Handle<double> weightHandle;
       ev.getByLabel(weightTag_, weightHandle);
       double weight = *weightHandle;
@@ -49,7 +49,7 @@ bool FSRWeightAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
 
 /////////////////////////////////////////////////////////////////////////////////////
 #include <stdarg.h>
-void FSRWeightAnalyzer::safe_printf(const char* fmt, ...) {
+void WFSRWeightAnalyzer::safe_printf(const char* fmt, ...) {
       const unsigned int bufsize = 256;
       char chout[bufsize];
       va_list variables;
@@ -59,4 +59,4 @@ void FSRWeightAnalyzer::safe_printf(const char* fmt, ...) {
       va_end(variables);
 }
 
-DEFINE_FWK_MODULE(FSRWeightAnalyzer);
+DEFINE_FWK_MODULE(WFSRWeightAnalyzer);

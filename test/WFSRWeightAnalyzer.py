@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 # Process name
-process = cms.Process("fsrAna")
+process = cms.Process("WFSRAna")
 
 # Max events
 process.maxEvents = cms.untracked.PSet(
@@ -11,7 +11,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Printouts
 process.MessageLogger = cms.Service("MessageLogger",
-      debugModules = cms.untracked.vstring('fsrWeight','weightAnalyzer'),
+      debugModules = cms.untracked.vstring('WFSRWeight','weightAnalyzer'),
       cout = cms.untracked.PSet(
             #default = cms.untracked.PSet(
             #      limit = cms.untracked.int32(10)
@@ -29,14 +29,14 @@ process.source = cms.Source("PoolSource",
       #fileNames = cms.untracked.vstring("file:/dataamscie1b/Wmunu-Summer09-MC_31X_V2_preproduction_311-v1/0011/F4C91F77-766D-DE11-981F-00163E1124E7.root")
 )
 
-# Produce event weights according to FSR QED O(alpha) correct matrix element calculation
-process.fsrWeight = cms.EDProducer("FSRWeightProducer",
+# Produce event weights according to FSR QED O(alpha) matrix element + missing NLO
+process.WFSRWeight = cms.EDProducer("WFSRWeightProducer",
       GenTag = cms.untracked.InputTag("generator"),
 )
 
 # Check that it is fine
-process.weightAnalyzer = cms.EDFilter("FSRWeightAnalyzer",
-      WeightTag = cms.untracked.InputTag("fsrWeight")
+process.weightAnalyzer = cms.EDFilter("WFSRWeightAnalyzer",
+      WeightTag = cms.untracked.InputTag("WFSRWeight")
 )
 
 process.include("SimGeneral/HepPDTESSource/data/pythiapdt.cfi")
@@ -52,18 +52,18 @@ process.MyEventContent = cms.PSet(
       outputCommands = process.AODSIMEventContent.outputCommands
 )
 process.MyEventContent.outputCommands.extend(
-      cms.untracked.vstring('keep *_fsrWeight_*_*')
+      cms.untracked.vstring('keep *_WFSRWeight_*_*')
 )
 
 # Output (optionaly filtered by path)
 process.output = cms.OutputModule("PoolOutputModule",
     process.MyEventContent,
     SelectEvents = cms.untracked.PSet(
-        SelectEvents = cms.vstring('fsrAna')
+        SelectEvents = cms.vstring('WFSRAna')
     ),
-    fileName = cms.untracked.string('fsrWeighted_Events.root')
+    fileName = cms.untracked.string('WFSRWeighted_Events.root')
 )
 
 # Runnning and end paths
-process.fsrAna = cms.Path(process.fsrWeight*process.weightAnalyzer*process.printGenParticles)
+process.WFSRAna = cms.Path(process.WFSRWeight*process.weightAnalyzer*process.printGenParticles)
 process.end = cms.EndPath(process.output)
