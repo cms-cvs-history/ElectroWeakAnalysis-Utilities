@@ -2,10 +2,10 @@
 #include "FWCore/Framework/interface/EDFilter.h"
 #include "FWCore/ParameterSet/interface/InputTag.h"
 
-class EwkPdfWeightAnalyzer: public edm::EDFilter {
+class PdfWeightAnalyzer: public edm::EDFilter {
 public:
-      EwkPdfWeightAnalyzer(const edm::ParameterSet& pset);
-      virtual ~EwkPdfWeightAnalyzer();
+      PdfWeightAnalyzer(const edm::ParameterSet& pset);
+      virtual ~PdfWeightAnalyzer();
       virtual bool filter(edm::Event &, const edm::EventSetup&);
       virtual void beginJob(const edm::EventSetup& eventSetup) ;
       virtual void endJob() ;
@@ -23,21 +23,21 @@ private:
 #include "DataFormats/Common/interface/Handle.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
-EwkPdfWeightAnalyzer::EwkPdfWeightAnalyzer(const edm::ParameterSet& pset) :
+PdfWeightAnalyzer::PdfWeightAnalyzer(const edm::ParameterSet& pset) :
   pdfWeightTag_(pset.getUntrackedParameter<edm::InputTag> ("PdfWeightTag")) { 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-EwkPdfWeightAnalyzer::~EwkPdfWeightAnalyzer(){}
+PdfWeightAnalyzer::~PdfWeightAnalyzer(){}
 
 /////////////////////////////////////////////////////////////////////////////////////
-void EwkPdfWeightAnalyzer::beginJob(const edm::EventSetup& eventSetup){}
+void PdfWeightAnalyzer::beginJob(const edm::EventSetup& eventSetup){}
 
 /////////////////////////////////////////////////////////////////////////////////////
-void EwkPdfWeightAnalyzer::endJob(){}
+void PdfWeightAnalyzer::endJob(){}
 
 /////////////////////////////////////////////////////////////////////////////////////
-bool EwkPdfWeightAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
+bool PdfWeightAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
       edm::Handle<std::vector<double> > weightHandle;
       ev.getByLabel(pdfWeightTag_, weightHandle);
       std::vector<double> weights = (*weightHandle);
@@ -56,7 +56,7 @@ bool EwkPdfWeightAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
 
 /////////////////////////////////////////////////////////////////////////////////////
 #include <stdarg.h>
-void EwkPdfWeightAnalyzer::safe_printf(const char* fmt, ...) {
+void PdfWeightAnalyzer::safe_printf(const char* fmt, ...) {
       const unsigned int bufsize = 256;
       char chout[bufsize];
       va_list variables;
@@ -66,4 +66,4 @@ void EwkPdfWeightAnalyzer::safe_printf(const char* fmt, ...) {
       va_end(variables);
 }
 
-DEFINE_FWK_MODULE(EwkPdfWeightAnalyzer);
+DEFINE_FWK_MODULE(PdfWeightAnalyzer);

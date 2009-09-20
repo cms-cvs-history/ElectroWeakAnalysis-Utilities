@@ -11,7 +11,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Printouts
 process.MessageLogger = cms.Service("MessageLogger",
-      debugModules = cms.untracked.vstring('ewkPdfWeights','pdfAnalyzer'),
+      debugModules = cms.untracked.vstring('pdfWeights','pdfAnalyzer'),
       cout = cms.untracked.PSet(
             #default = cms.untracked.PSet(
             #      limit = cms.untracked.int32(10)
@@ -30,18 +30,19 @@ process.source = cms.Source("PoolSource",
 )
 
 # Produce PDF weights (maximum is 3)
-process.ewkPdfWeights = cms.EDProducer("EwkPdfWeightProducer",
+process.pdfWeights = cms.EDProducer("PdfWeightProducer",
       PdfInfoTag = cms.untracked.InputTag("generator"),
       PdfSetNames = cms.untracked.vstring(
-               "cteq65.LHgrid", 
-            #, "MRST2006nnlo.LHgrid"
-            #, "MRST2007lomod.LHgrid"
+              "cteq65.LHgrid"
+            , "MRST2006nnlo.LHgrid"
+            , "MRST2007lomod.LHgrid"
+            , "cteq61..LHgrid"
       )
 )
 
 # Check that it is fine
-process.pdfAnalyzer = cms.EDFilter("EwkPdfWeightAnalyzer",
-      PdfWeightTag = cms.untracked.InputTag("ewkPdfWeights:cteq65")
+process.pdfAnalyzer = cms.EDFilter("PdfWeightAnalyzer",
+      PdfWeightTag = cms.untracked.InputTag("pdfWeights:cteq65")
 )
 
 # Save PDF weights in the output file 
@@ -50,7 +51,7 @@ process.MyEventContent = cms.PSet(
       outputCommands = process.AODSIMEventContent.outputCommands
 )
 process.MyEventContent.outputCommands.extend(
-      cms.untracked.vstring('keep *_ewkPdfWeights_*_*')
+      cms.untracked.vstring('keep *_pdfWeights_*_*')
 )
 
 # Output (optionaly filtered by path)
@@ -63,5 +64,5 @@ process.pdfOutput = cms.OutputModule("PoolOutputModule",
 )
 
 # Runnning and end paths
-process.pdfana = cms.Path(process.ewkPdfWeights*process.pdfAnalyzer)
+process.pdfana = cms.Path(process.pdfWeights*process.pdfAnalyzer)
 process.end = cms.EndPath(process.pdfOutput)
