@@ -5,17 +5,17 @@ process = cms.Process("PDFANA")
 
 # Max events
 process.maxEvents = cms.untracked.PSet(
-    #input = cms.untracked.int32(-1)
-    input = cms.untracked.int32(10)
+    input = cms.untracked.int32(-1)
+    #input = cms.untracked.int32(10)
 )
 
 # Printouts
 process.MessageLogger = cms.Service("MessageLogger",
       debugModules = cms.untracked.vstring('pdfWeights','pdfAnalyzer'),
       cout = cms.untracked.PSet(
-            #default = cms.untracked.PSet(
-            #      limit = cms.untracked.int32(10)
-            #),
+            default = cms.untracked.PSet(
+                  limit = cms.untracked.int32(10)
+            ),
             threshold = cms.untracked.string('INFO')
       ),
       destinations = cms.untracked.vstring('cout')
@@ -36,13 +36,16 @@ process.pdfWeights = cms.EDProducer("PdfWeightProducer",
               "cteq65.LHgrid"
             , "MRST2006nnlo.LHgrid"
             , "MRST2007lomod.LHgrid"
-            , "cteq61..LHgrid"
       )
 )
 
 # Check that it is fine
 process.pdfAnalyzer = cms.EDFilter("PdfWeightAnalyzer",
-      PdfWeightTag = cms.untracked.InputTag("pdfWeights:cteq65")
+      PdfWeightTags = cms.untracked.VInputTag(
+              "pdfWeights:cteq65"
+            , "pdfWeights:MRST2006nnlo"
+            , "pdfWeights:MRST2007lomod"
+      )
 )
 
 # Save PDF weights in the output file 

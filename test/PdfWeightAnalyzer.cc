@@ -49,9 +49,9 @@ void PdfWeightAnalyzer::endJob(){
       edm::LogVerbatim("") << "Analyzed (reference): " << originalEvents_ << " [events]";
       if (originalEvents_==0) return;
       for (unsigned int i=0; i<pdfWeightTags_.size(); ++i) {
-            double nmembers = weightedEvents_.size()-pdfStart_[i];
+            unsigned int nmembers = weightedEvents_.size()-pdfStart_[i];
             if (i<pdfWeightTags_.size()-1) nmembers = pdfStart_[i+1] - pdfStart_[i];
-            double npairs = (nmembers-1)/2;
+            unsigned int npairs = (nmembers-1)/2;
             edm::LogVerbatim("") << "\nResults for PDF set " << pdfWeightTags_[i].instance() << ", number of uncorrelated variations used: " << npairs;
 
             double events_central = weightedEvents_[pdfStart_[i]]; 
