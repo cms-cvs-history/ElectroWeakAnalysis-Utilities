@@ -57,8 +57,8 @@ void PdfWeightAnalyzer::endJob(){
             double events_central = weightedEvents_[pdfStart_[i]]; 
             edm::LogVerbatim("PDFAnalysis") << "\tEstimate for central PDF set: " << int(events_central) << " [events], change with respect to reference: " << std::setprecision(4) << 100*(events_central/originalEvents_-1.) << " [%]";
 
-            edm::LogVerbatim("PDFAnalysis") << "\tNumber of eigenvectors for uncertainty estimation: " << npairs;
             if (npairs>0) {
+                  edm::LogVerbatim("PDFAnalysis") << "\tNumber of eigenvectors for uncertainty estimation: " << npairs;
               double wplus = 0.;
               double wminus = 0.;
               for (unsigned int j=0; j<npairs; ++j) {
@@ -79,6 +79,8 @@ void PdfWeightAnalyzer::endJob(){
               if (wplus>0) wplus = sqrt(wplus);
               if (wminus>0) wminus = sqrt(wminus);
               edm::LogVerbatim("PDFAnalysis") << "\tRelative uncertainty with respect to central: +" << std::setprecision(4) << 100.*wplus << " / -" << std::setprecision(4) << 100.*wminus << " [%]";
+            } else {
+                  edm::LogVerbatim("PDFAnalysis") << "\tNO eigenvectors for uncertainty estimation";
             }
       }
       edm::LogVerbatim("PDFAnalysis") << ">>>> End of PDF weight systematics summary >>>>";
