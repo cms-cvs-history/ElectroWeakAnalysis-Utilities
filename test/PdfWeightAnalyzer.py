@@ -14,7 +14,7 @@ process.MessageLogger = cms.Service("MessageLogger",
       debugModules = cms.untracked.vstring('pdfWeights','pdfAnalyzer'),
       cout = cms.untracked.PSet(
             default = cms.untracked.PSet(
-                  limit = cms.untracked.int32(10)
+                  limit = cms.untracked.int32(100)
             ),
             threshold = cms.untracked.string('INFO')
       ),
