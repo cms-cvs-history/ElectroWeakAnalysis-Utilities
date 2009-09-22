@@ -11,11 +11,8 @@ process.maxEvents = cms.untracked.PSet(
 
 # Printouts
 process.MessageLogger = cms.Service("MessageLogger",
-      debugModules = cms.untracked.vstring('pdfWeights','pdfAnalyzer'),
       cout = cms.untracked.PSet(
-            default = cms.untracked.PSet(
-                  limit = cms.untracked.int32(100)
-            ),
+            default = cms.untracked.PSet(limit = cms.untracked.int32(100)),
             threshold = cms.untracked.string('INFO')
       ),
       destinations = cms.untracked.vstring('cout')
@@ -39,8 +36,30 @@ process.pdfWeights = cms.EDProducer("PdfWeightProducer",
       )
 )
 
-# Check that it is fine
-process.pdfAnalyzer = cms.EDFilter("PdfWeightAnalyzer",
+# Count PDF-weighted events and collect uncertainties
+process.pdfDenominatorSystematics = cms.EDFilter("PdfSystematicsAnalyzer",
+      PdfWeightTags = cms.untracked.VInputTag(
+              "pdfWeights:cteq65"
+            , "pdfWeights:MRST2006nnlo"
+            , "pdfWeights:MRST2007lomod"
+      )
+)
+
+# WMN fast selector (use 'validator' in this example)
+process.wmnSelFilter = cms.EDFilter("WMuNuValidator",
+      # Fast selection flag (no histograms or book-keeping) ->
+      FastOption = cms.untracked.bool(True),
+
+      # Input collections ->
+      TrigTag = cms.untracked.InputTag("TriggerResults::HLT"),
+      MuonTag = cms.untracked.InputTag("muons"),
+      METTag = cms.untracked.InputTag("corMetGlobalMuons"),
+      METIncludesMuons = cms.untracked.bool(True),
+      JetTag = cms.untracked.InputTag("sisCone5CaloJets")
+)
+
+# Count PDF-weighted 'selected' events and collect uncertainties
+process.pdfNumeratorSystematics = cms.EDFilter("PdfSystematicsAnalyzer",
       PdfWeightTags = cms.untracked.VInputTag(
               "pdfWeights:cteq65"
             , "pdfWeights:MRST2006nnlo"
@@ -67,5 +86,10 @@ process.pdfOutput = cms.OutputModule("PoolOutputModule",
 )
 
 # Runnning and end paths
-process.pdfana = cms.Path(process.pdfWeights*process.pdfAnalyzer)
+process.pdfana = cms.Path(
+       process.pdfWeights
+      *process.pdfDenominatorSystematics
+      *process.wmnSelFilter
+      *process.pdfNumeratorSystematics
+)
 process.end = cms.EndPath(process.pdfOutput)

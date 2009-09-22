@@ -2,10 +2,10 @@
 #include "FWCore/Framework/interface/EDFilter.h"
 #include "FWCore/ParameterSet/interface/InputTag.h"
 
-class PdfWeightAnalyzer: public edm::EDFilter {
+class PdfSystematicsAnalyzer: public edm::EDFilter {
 public:
-      PdfWeightAnalyzer(const edm::ParameterSet& pset);
-      virtual ~PdfWeightAnalyzer();
+      PdfSystematicsAnalyzer(const edm::ParameterSet& pset);
+      virtual ~PdfSystematicsAnalyzer();
       virtual bool filter(edm::Event &, const edm::EventSetup&);
       virtual void beginJob(const edm::EventSetup& eventSetup) ;
       virtual void endJob() ;
@@ -25,15 +25,15 @@ private:
 #include "DataFormats/Common/interface/Handle.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
-PdfWeightAnalyzer::PdfWeightAnalyzer(const edm::ParameterSet& pset) :
+PdfSystematicsAnalyzer::PdfSystematicsAnalyzer(const edm::ParameterSet& pset) :
   pdfWeightTags_(pset.getUntrackedParameter<std::vector<edm::InputTag> > ("PdfWeightTags")) { 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-PdfWeightAnalyzer::~PdfWeightAnalyzer(){}
+PdfSystematicsAnalyzer::~PdfSystematicsAnalyzer(){}
 
 /////////////////////////////////////////////////////////////////////////////////////
-void PdfWeightAnalyzer::beginJob(const edm::EventSetup& eventSetup){
+void PdfSystematicsAnalyzer::beginJob(const edm::EventSetup& eventSetup){
       originalEvents_ = 0;
       edm::LogVerbatim("PDFAnalysis") << "PDF uncertainties will be determined for the following sets: ";
       for (unsigned int i=0; i<pdfWeightTags_.size(); ++i) {
@@ -43,7 +43,7 @@ void PdfWeightAnalyzer::beginJob(const edm::EventSetup& eventSetup){
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-void PdfWeightAnalyzer::endJob(){
+void PdfSystematicsAnalyzer::endJob(){
       edm::LogVerbatim("PDFAnalysis") << "\n>>>> Begin of PDF weight systematics summary >>>>";
       edm::LogVerbatim("PDFAnalysis") << "Analyzed (reference): " << originalEvents_ << " [events]";
       if (originalEvents_==0) return;
@@ -88,7 +88,7 @@ void PdfWeightAnalyzer::endJob(){
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-bool PdfWeightAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
+bool PdfSystematicsAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
       originalEvents_++;
 
       for (unsigned int i=0; i<pdfWeightTags_.size(); ++i) {
@@ -123,4 +123,4 @@ bool PdfWeightAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
       return true;
 }
 
-DEFINE_FWK_MODULE(PdfWeightAnalyzer);
+DEFINE_FWK_MODULE(PdfSystematicsAnalyzer);
