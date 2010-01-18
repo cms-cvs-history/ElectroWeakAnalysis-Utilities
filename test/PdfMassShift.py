@@ -22,7 +22,7 @@ process.MessageLogger = cms.Service("MessageLogger",
 process.source = cms.Source("PoolSource",
       debugVerbosity = cms.untracked.uint32(0),
       debugFlag = cms.untracked.bool(False),
-      fileNames = cms.untracked.vstring("file:/data4/Wmunu_Summer09-MC_31X_V3_AODSIM-v1/0009/F82D4260-507F-DE11-B5D6-00093D128828.root")
+      fileNames = cms.untracked.vstring("file:/data4/ZMuMu_Summer09-MC_31X_V3_preproduction_312-v1_RECO/20A5B350-6979-DE11-A6EF-001560AD3140.root")
 )
 
 # Produce PDF weights (maximum is 3)
@@ -35,19 +35,10 @@ process.pdfWeights = cms.EDProducer("PdfWeightProducer",
       )
 )
 
-### NOTE: the following WMN selectors require the presence of
-### the libraries and plugins fron the ElectroWeakAnalysis/WMuNu package
-### So you need to process the ElectroWeakAnalysis/WMuNu package with
-### some old CMSSW versions (at least <=3_1_2, <=3_3_0_pre4)
-#
-
-# Selector and parameters
-# WMN fast selector (use W candidates in this example)
-process.load("ElectroWeakAnalysis.WMuNu.WMuNuSelection_cff")
-
 # Collect uncertainties for rate and acceptance
-process.pdfSystematics = cms.EDFilter("PdfSystematicsAnalyzer",
+process.pdfSystematics = cms.EDFilter("PdfMassShift",
       SelectorPath = cms.untracked.string('pdfana'),
+      GenParticlesTag = cms.untracked.InputTag("genParticles"),
       PdfWeightTags = cms.untracked.VInputTag(
               "pdfWeights:cteq65"
             #, "pdfWeights:MRST2006nnlo"
@@ -55,10 +46,12 @@ process.pdfSystematics = cms.EDFilter("PdfSystematicsAnalyzer",
       )
 )
 
+process.load("ElectroWeakAnalysis/Utilities/zmmSelection_cfi")
+
 # Main path
 process.pdfana = cms.Path(
        process.pdfWeights
-      *process.selectCaloMetWMuNus
+      *process.goldenZMMSelectionSequence
 )
 
 process.end = cms.EndPath(process.pdfSystematics)
