@@ -1,6 +1,6 @@
 ////////// Header section /////////////////////////////////////////////
 #include "FWCore/Framework/interface/EDFilter.h"
-#include "FWCore/ParameterSet/interface/InputTag.h"
+#include "FWCore/Utilities/interface/InputTag.h"
 
 class PdfSystematicsAnalyzer: public edm::EDFilter {
 public:
@@ -27,7 +27,7 @@ private:
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "DataFormats/Common/interface/Handle.h"
 
-#include "FWCore/Framework/interface/TriggerNames.h"
+#include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -162,8 +162,8 @@ bool PdfSystematicsAnalyzer::filter(edm::Event & ev, const edm::EventSetup&){
             return false;
       }
 
-      edm::TriggerNames trigNames;
-      trigNames.init(*triggerResults);
+      const edm::TriggerNames & trigNames = ev.triggerNames(*triggerResults);
+
       unsigned int pathIndex = trigNames.triggerIndex(selectorPath_);
       bool pathFound = (pathIndex>=0 && pathIndex<trigNames.size());
       if (pathFound) {
