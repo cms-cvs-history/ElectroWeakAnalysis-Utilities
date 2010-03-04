@@ -19,8 +19,6 @@ process.MessageLogger.cout = cms.untracked.PSet(
 
 # Input files (on disk)
 process.source = cms.Source("PoolSource",
-      debugVerbosity = cms.untracked.uint32(0),
-      debugFlag = cms.untracked.bool(False),
       fileNames = cms.untracked.vstring("file:/data4/ZMuMu_Summer09-MC_31X_V3_preproduction_312-v1_RECO/20A5B350-6979-DE11-A6EF-001560AD3140.root")
 )
 
